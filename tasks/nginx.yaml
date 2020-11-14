@@ -1,0 +1,46 @@
+# Nginx
+- name: Ensure nginx is at the latest version
+  apt: name=nginx state=latest
+
+- name: copy certificate
+  copy:
+    src: certificate.crt
+    dest: /etc/ssl/certs/certificate.cert
+  become: yes
+
+- name: copy certificate key
+  copy:
+    src: certificate.key
+    dest: /etc/ssl/private/certificate.key
+  become: yes
+
+- name: copy the nginx config file and restart nginx
+  template: src=static-site.cfg.tpl
+    dest=/etc/nginx/sites-available/abc.com
+  become: yes
+  notify: restart nginx
+
+- name: create symlink
+  file:
+    src: /etc/nginx/sites-available/abc.com
+    dest: /etc/nginx/sites-enabled/default
+    state: link
+  become: yes
+
+- name: copy the content of the web site
+  copy:
+    src: static-site-src/
+    dest: /home/vagrant/abc.com
+
+- name: restart nginx
+  service:
+    name: nginx
+    state: restarted
+  become: yes
+#   http {
+#   brotli on;
+#   brotli_comp_level 4;
+#   brotli_types text/plain text/css application/javascript application/json image/svg+xml application/xml+rss;
+
+#   brotli_static on;
+# }

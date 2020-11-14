@@ -1,0 +1,9 @@
+#The prerequisites playbook
+- name: Apt Update
+  command: apt-get update
+
+- name: Install git
+  apt:
+    name: git
+    state: present
+    update_cache: yes

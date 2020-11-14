@@ -1,0 +1,32 @@
+---
+- name: Deploy React App Front-end Build
+  connection: ssh
+  gather_facts: false
+  hosts: all
+  vars:
+    repo_folder: /Users/maverick/Documents/repos/app
+    live_folder: /Users/maverick/Documents/deployments/build
+    repo_name: saxenanickk/webpack-demo
+
+  # tasks, indented under playbook name
+  tasks:
+    - git:
+        repo: https://github.com/{{ repo_name }}.git
+        dest: "{{ repo_folder }}"
+        update: yes
+
+    - name: Install dependencies
+      npm:
+        path: /Users/maverick/Documents/repos/app
+        executable: /usr/local/bin/npm
+
+    - name: Build project
+      command: yarn build
+      args:
+        chdir: "{{ repo_folder }}"
+
+    - name: Copy build to live directory
+      command: cp -TRv build {{ live_folder }}
+      args:
+        chdir: "{{ repo_folder }}"
+# end of Playbook

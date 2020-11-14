@@ -1,0 +1,24 @@
+- name: Clone Repo
+  git:
+    repo: https://github.com/saxenanickk/ansible-demo-react.git
+    dest: /home/vagrant/repo/
+  become_user: root
+
+- name: Install dependencies
+  command: npm install
+  args:
+    chdir: /home/vagrant/repo/
+
+- name: Build project
+  command: npm run build
+  args:
+    chdir: /home/vagrant/repo/
+# - name: Serve project on port 8000
+#   command: python -m SimpleHTTPServer 8000
+#   args:
+#     chdir: /home/vagrant/repo/build
+
+# - name: Copy build to live directory
+#   command: cp -TRv build ~/repo/deployments/
+#   args:
+#     chdir: /usr/var/www/

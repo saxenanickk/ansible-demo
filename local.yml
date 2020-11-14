@@ -1,0 +1,41 @@
+---
+- hosts: local
+  connection: local
+  become: yes
+  become_user: root
+  vars:
+    #variable needed during node installation
+    var_node: /tmp
+    repo_dir: /home/vagrant/repo/
+    live_dir: /home/vagrant/deployments/
+  tasks:
+    # Install prerequisites
+    - include: tasks/prerequisites.yaml
+    # Install Nginx
+    - include: tasks/nginx.yaml
+    # Install Node.js
+    # - include: tasks/nodejs.yaml
+    # # Setup Project
+    # - include: tasks/projectsetup.yaml
+  handlers:
+    - name: restart nginx
+      service: name=nginx
+        state=restarted
+# - hosts: local
+#   connection: local
+#   become: yes
+#   become_user: root
+#   vars:
+#     repo_folder: /usr/var/www/
+#     live_folder: /usr/var/www/deployments/
+#     repo_name: saxenanickk/webpack-demo
+#   roles:
+#     - nginx
+# completed inventory.yml
+# webservers:
+#   hosts:
+#     server1:
+#       ansible_connection: ssh
+#       ansible_host: "192.168.43.42"
+#       ansible_user: maverick
+#       ansible_password: "0807"
